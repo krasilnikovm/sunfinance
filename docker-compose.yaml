@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+###> doctrine/doctrine-bundle ###
+  database:
+    image: postgres:15-alpine
+    container_name: sunfinance_database
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: sunfinance
+      # You should definitely change the password in production
+      POSTGRES_USER: me
+      POSTGRES_PASSWORD: me
+    volumes:
+      - database_data:/var/lib/postgresql/data:rw
+    networks:
+      - sunfinance
+      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
+      # - ./docker/db/data:/var/lib/postgresql/data:rw
+###< doctrine/doctrine-bundle ###
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: sunfinance_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docker/nginx/etc/nginx/conf.d:/etc/nginx/conf.d
+      - .:/var/www/sunfinance
+    depends_on:
+      - php
+      - database
+    networks:
+      - sunfinance
+
+  php:
+    build: docker/php
+    hostname: sunfinance
+    container_name: sunfinance_php
+    command: sh -c "php-fpm -F"
+    volumes:
+      - .:/var/www/sunfinance
+    depends_on:
+      - database
+    ports:
+      - "9000:9000"
+    networks:
+      - sunfinance
+
+networks:
+  sunfinance:
+    driver: bridge
+    name: sunfinance
+
+volumes:
+###> doctrine/doctrine-bundle ###
+  database_data:
+###< doctrine/doctrine-bundle ###
