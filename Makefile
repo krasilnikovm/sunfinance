@@ -4,5 +4,5 @@ cs-check:
 cs-fix:
 	./vendor/bin/php-cs-fixer fix
 
-psalm:
-	./vendor/bin/psalm
+phpstan:
+	./vendor/bin/phpstan
