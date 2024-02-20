@@ -1,0 +1,97 @@
+name: testing
+
+on:
+  - push
+
+jobs:
+  application-test:
+    runs-on: ubuntu-latest
+    services:
+      database:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: sunfinance
+          POSTGRES_USER: me
+          POSTGRES_PASSWORD: me
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Composer Downloading
+        run: curl -ss "https://getcomposer.org/installer" | php
+
+      - name: Composer Install
+        run: php composer.phar install
+
+      - name: Run Tests
+        run: make application-test
+
+
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Composer Downloading
+        run: curl -ss "https://getcomposer.org/installer" | php
+
+      - name: Composer Install
+        run: php composer.phar install
+
+      - name: Run Tests
+        run: make unit-test
+
+  static-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Composer Downloading
+        run: curl -ss "https://getcomposer.org/installer" | php
+
+      - name: Composer Install
+        run: php composer.phar install
+
+      - name: Run Statical Analysis
+        run: make phpstan
+
+  code-style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Composer Downloading
+        run: curl -ss "https://getcomposer.org/installer" | php
+
+      - name: Composer Install
+        run: php composer.phar install
+
+      - name: Run Code Style Checking
+        run: make cs-check

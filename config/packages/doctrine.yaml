@@ -22,6 +22,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Customer/Entity'
                 prefix: 'App\Customer\Entity'
                 alias: AppCustomer
+            App\Loan:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Loan/Entity'
+                prefix: 'App\Loan\Entity'
+                alias: AppLoan
 
 when@test:
     doctrine:
