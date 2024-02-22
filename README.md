@@ -1,6 +1,5 @@
 # Sunfinance application 
-
-This is a Symfony application with Docker container setup.
+Application to handle payment import CSV files and incoming API calls.
 
 ## Setup
 
