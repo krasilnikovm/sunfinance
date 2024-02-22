@@ -1,5 +1,5 @@
-#controllers:
-#    resource:
-#        path: ../src/Controller/
-#        namespace: App\Controller
-#    type: attribute
+loan.controllers:
+    resource:
+        path: ../src/Loan/Controller/
+        namespace: App\Loan\Controller
+    type: attribute

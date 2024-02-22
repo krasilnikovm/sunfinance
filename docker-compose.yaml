@@ -38,7 +38,7 @@ services:
     build: docker/php
     hostname: sunfinance
     container_name: sunfinance_php
-    command: sh -c "php-fpm -F"
+    command: sh -c "make composer & make fixtures & php-fpm -F"
     volumes:
       - .:/var/www/sunfinance
     depends_on:
